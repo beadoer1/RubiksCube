@@ -14,16 +14,36 @@ var input = {
 
 var resultArr = {
     right : function(arr, num){
-        for(var i = 0; i < Number(num); i++){
-            var w = arr.pop();
-            arr.unshift(w);
+        if(Number(num) >= -100 && Number(num) <= 0){
+            for(var i = Number(num); i < 0; i++){
+                var w = arr.shift();
+                arr.push(w);
+            }
+        } else if(Number(num) > 0 && Number(num) < 100){
+            for(var i = 0; i < Number(num); i++){
+                var w = arr.pop();
+                arr.unshift(w);
+            }
+        } else {
+            document.write("잘못된 값을 입력하였습니다.");
+            return;
         }
         return arr;
     },
     left : function(arr, num){
-        for(var i = 0; i < Number(num); i++){
-            var w = arr.shift();
-            arr.push(w);
+        if(Number(num) >= -100 && Number(num) <= 0){
+            for(var i = 0; i < Number(num); i++){
+                var w = arr.pop();
+                arr.unshift(w);
+            }
+        } else if(Number(num) > 0 && Number(num) < 100){
+            for(var i = 0; i < Number(num); i++){
+                var w = arr.shift();
+                arr.push(w);
+            }
+        } else {
+            document.write("잘못된 값을 입력하였습니다.");
+            return;
         }
         return arr;
     }
