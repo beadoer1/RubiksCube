@@ -11,16 +11,7 @@ var input = {
         return t;
     }
 }
-var sep = {
-    sep1 : function(t1){
-        textSep1 = t1.split(" ");
-        return textSep1;
-    },
-    sep2 : function(t2){
-        textSep2 = t2.split("");
-        return textSep2;
-    }
-}
+
 var resultArr = {
     right : function(arr, num){
         for(var i = 0; i < Number(num); i++){
@@ -37,6 +28,7 @@ var resultArr = {
         return arr;
     }
 }
+
 var output = {
     printResult : function(result){
         var out = document.getElementById('output');
@@ -46,8 +38,8 @@ var output = {
 
 var main = function() {
     var mainText = input.text();
-    var sepArr = sep.sep1(mainText);
-    var sepTextArr = sep.sep2(sepArr[0]);
+    var sepArr = mainText.split(" ");
+    var sepTextArr = sepArr[0].split("");
     if(sepArr[1] === "r" || sepArr[1] === "R") {
         resultArr.right(sepTextArr, sepArr[2]);
     } else if(sepArr[1] === "l" || sepArr[1] === "L"){
