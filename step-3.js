@@ -102,29 +102,26 @@ var cubeMoveMain = {
 };
 // 4-2. 조작 면 주변 4면에 적용되는 움직임을 구현
 var cubeMoveSide = {
-    getFirstRow : function(){
-
-    },    
-    getThirdtRow : function(){
-
+    getRow : function(obj, num){ // num은 0(first row) 혹은 2(third row)를 입력.
+        var getValue = obj[totalArr[num]]
+        return getValue;
     },
-    getFirstColumn : function(){
-
-    },    
-    getThirdColumn : function(){
-
+    getColumn : function(obj, num){// num은 0(first column) 혹은 2(third column)를 입력.
+        var getValue = [];
+        for(i = 0; i < 3; i++){
+            getValue.push(obj[totalArr[i]][num]);
+        };
+        return getValue;
     },
-    pushFirstRow : function(){
-
+    pushRow : function(valueFrom, objTo, num){ // num은 0(first row) 혹은 2(third row)를 입력.
+        objTo[totalArr[num]] = valueFrom;
+        return;
     },
-    pushThirdRow : function(){
-
-    },
-    pushFirstColumn : function(){
-
-    },
-    pushThirdColumn : function(){
-
+    pushColumn : function(valueFrom, objTo, num){ // num은 0(first row) 혹은 2(third row)를 입력.
+        for(i = 0; i < 3; i++){
+            objTo[totalArr[i]][num] = valueFrom[i];
+        }
+        return;
     }
 };
 // 4-3. 6면 조작에 대한 함수 구현
