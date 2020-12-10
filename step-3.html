@@ -27,19 +27,19 @@
     <div id = "Back"></div>
     <div id = "Bottom"></div>
 
-    <button id = "T">T</button>
-    <button id = "Bo">Bo</button>
-    <button id = "L">L</button>
-    <button id = "R">R</button>
-    <button id = "F">F</button>
-    <button id = "Ba">Ba</button>
-    <button id = "Q">Q</button> <br>
-    <button id = "TR">T'</button>
-    <button id = "BoR">Bo'</button> 
-    <button id = "LR">L'</button> 
-    <button id = "RR">R'</button> 
-    <button id = "FR">F'</button> 
-    <button id = "BaR">Ba'</button> <br><br>
+    <button id = "T" onclick = "cubeMove.top()">T</button>
+    <button id = "Bo" onclick = "cubeMove.bottom()">Bo</button>
+    <button id = "L" onclick = "cubeMove.left()">L</button>
+    <button id = "R" onclick = "cubeMove.right()">R</button>
+    <button id = "F" onclick = "cubeMove.front()">F</button>
+    <button id = "Ba" onclick = "cubeMove.back()">Ba</button>
+    <button id = "Q" onclick = "quitBtn.quit()">Q</button> <br>
+    <button id = "TR" onclick = "cubeMove.topRev()">T'</button>
+    <button id = "BoR" onclick = "cubeMove.bottomRev()">Bo'</button> 
+    <button id = "LR" onclick = "cubeMove.leftRev()">L'</button> 
+    <button id = "RR" onclick = "cubeMove.rightRev()">R'</button> 
+    <button id = "FR" onclick = "cubeMove.frontRev()">F'</button> 
+    <button id = "BaR" onclick = "cubeMove.backRev()">Ba'</button> <br><br>
 
     <input id = "command"><br>
     <button id = "go">실행</button>
