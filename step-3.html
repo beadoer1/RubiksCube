@@ -4,45 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>루빅스 큐브 구현하기</title>
-    <style>
-        input {
+    <style src = "step-3.css">
+        h1 {
+            text-align : center;
+            margin : 20px 0px 50px 0px;
+        }
+        h3 {
+            text-align : center;
+            margin : auto;
+        }
+        h4 {
+            text-align : center;
+        }
+        .cube-body {
+            width : 230px;
+            text-align : center;
+            display : flex;
+            flex-direction : row;
+            flex-wrap : wrap;
+            margin : auto;
+        }
+        .innerBlock {
             margin : 5px;
+        }
+        .outerBlock {
+            width : 60px;
+            text-align : center;
+            margin : 5px 105px 5px 55px;
+        }
+        .command {
+            width : 550px;
+            display : flex;
+            flex-direction : row;
+            flex-wrap : wrap;
+            margin : auto
+        }
+        .buttons {
+            text-align : left;
+            margin : 20px auto;
         }
         button{
             margin : 5px;
         }
+        .commandInput {
+            text-align : right;
+            margin : 20px auto;
+        }
+        input {
+            margin : 5px;
+        }
+
     </style>
 </head>
 <body>
-    <h1>루빅스 큐브 구현하기</h1>
-    <h3>아래 버튼을 눌러 조작 하거나 명령어를 입력하여 큐브를 맞추어 보세요.</h3>
-    <h4>※ 동작 방법</h4>
-    <h4> 시계 방향으로 회전</h4><h5>T(Top), Bo(Bottom), L(Left), R(Right), F(Front), Ba(Back)</h5>
-    <h4> 시계 반대 방향으로 회전</h4><h5>T', Bo', L', R', F', Ba', Q(Quit) : 게임 종료</h5>
-        
-    <div id = "Top"></div>
-    <div id = "Left"></div>
-    <div id = "Front"></div>
-    <div id = "Right"></div>
-    <div id = "Back"></div>
-    <div id = "Bottom"></div>
+    <div class = "explain">
+        <h1>루빅스 큐브 구현하기</h1>
+        <h3>아래 버튼을 눌러 조작 하거나 명령어를 입력하여 큐브를 맞추어 보세요.</h3>
+        <h4>※ 동작 방법 (Q : 게임 종료)</h4>
+        <h4> 시계 방향으로 회전 --> T(Top), Bo(Bottom), L(Left), R(Right), F(Front), Ba(Back)</h4>
+        <h4> 시계 반대 방향으로 회전 --> T', Bo', L', R', F', Ba'</h4>
+    </div>
+    <div class = "cube-body">
+        <div class = "outerBlock" id = "Top"></div>
+        <div class = "innerBlock" id = "Left"></div>
+        <div class = "innerBlock" id = "Front"></div>
+        <div class = "innerBlock" id = "Right"></div>
+        <div class = "innerBlock" id = "Back"></div>
+        <div class = "outerBlock" id = "Bottom"></div>
+    </div>
 
-    <button id = "T" onclick = "cubeMove.top()">T</button>
-    <button id = "Bo" onclick = "cubeMove.bottom()">Bo</button>
-    <button id = "L" onclick = "cubeMove.left()">L</button>
-    <button id = "R" onclick = "cubeMove.right()">R</button>
-    <button id = "F" onclick = "cubeMove.front()">F</button>
-    <button id = "Ba" onclick = "cubeMove.back()">Ba</button>
-    <button id = "Q" onclick = "quitBtn.quit()">Q</button> <br>
-    <button id = "TR" onclick = "cubeMove.topRev()">T'</button>
-    <button id = "BoR" onclick = "cubeMove.bottomRev()">Bo'</button> 
-    <button id = "LR" onclick = "cubeMove.leftRev()">L'</button> 
-    <button id = "RR" onclick = "cubeMove.rightRev()">R'</button> 
-    <button id = "FR" onclick = "cubeMove.frontRev()">F'</button> 
-    <button id = "BaR" onclick = "cubeMove.backRev()">Ba'</button> <br><br>
+    <div class = "command">
+        <div class = "buttons">
+            <button id = "T" onclick = "cubeMove.top()">T</button>
+            <button id = "Bo" onclick = "cubeMove.bottom()">Bo</button>
+            <button id = "L" onclick = "cubeMove.left()">L</button>
+            <button id = "R" onclick = "cubeMove.right()">R</button>
+            <button id = "F" onclick = "cubeMove.front()">F</button>
+            <button id = "Ba" onclick = "cubeMove.back()">Ba</button>
+            <button id = "Q" onclick = "quitBtn.quit()">Q</button> <br>
+            <button id = "TR" onclick = "cubeMove.topRev()">T'</button>
+            <button id = "BoR" onclick = "cubeMove.bottomRev()">Bo'</button> 
+            <button id = "LR" onclick = "cubeMove.leftRev()">L'</button> 
+            <button id = "RR" onclick = "cubeMove.rightRev()">R'</button> 
+            <button id = "FR" onclick = "cubeMove.frontRev()">F'</button> 
+            <button id = "BaR" onclick = "cubeMove.backRev()">Ba'</button> <br><br>
+        </div>
 
-    <input id = "command"><br>
-    <button id = "go">실행</button>
+        <div class = "commandInput">
+            <input id = "command"><br>
+            <button id = "go">실행</button>
+        </div>
+    </div>
     <script src = "step-3.js"></script>
 </body>
 </html>
