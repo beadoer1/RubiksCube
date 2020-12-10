@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>루빅스 큐브 구현하기</title>
+    <style>
+        input {
+            margin : 5px;
+        }
+        button{
+            margin : 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>루빅스 큐브 구현하기</h1>
+    <h4>아래 버튼을 눌러 조작 하거나 명령어를 입력하여 큐브를 맞추어 보세요.</h4>
+    <h5>※ 동작 방법</h5>
+    <h5> T(Top) : 윗면 왼쪽 돌리기, Bo(Bottom) : 아랫면 오른쪽 돌리기, L(Left) : 왼면 아래로 밀기, R(Right) : 오른면 위로 밀기, F(Front) : 앞면 오른쪽 돌리기, Ba(Back) : 뒷면 왼쪽 돌리기, Q(Quit) : 게임 종료</h5>
+    <h5> T' : 윗면 오른쪽 돌리기, Bo' : 아랫면 왼쪽 돌리기, L' : 왼면 위로 밀기, R' : 오른면 아래로 밀기, F' : 앞면 왼쪽 돌리기, Ba' : 뒷면 왼쪽으로 돌리기</h5>
+    
+    <div id = "Top"></div>
+    <div id = "Left"></div>
+    <div id = "Front"></div>
+    <div id = "Right"></div>
+    <div id = "Back"></div>
+    <div id = "Bottom"></div>
+
+    <button id = "T">T</button>
+    <button id = "Bo">Bo</button>
+    <button id = "L">L</button>
+    <button id = "R">R</button>
+    <button id = "F">F</button>
+    <button id = "Ba">Ba</button>
+    <button id = "Q">Q</button> <br>
+    <button id = "TR">T'</button>
+    <button id = "BoR">Bo'</button> 
+    <button id = "LR">L'</button> 
+    <button id = "RR">R'</button> 
+    <button id = "FR">F'</button> 
+    <button id = "BaR">Ba'</button> <br><br>
+
+    <input id = "command"><br>
+    <button id = "go">실행</button>
+    <script src = "step-3.js"></script>
+</body>
+</html>
