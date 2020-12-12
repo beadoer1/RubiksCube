@@ -4,12 +4,12 @@ var test = {
     arr1 : ["4","5","6"],
     arr2 : ["7","8","9"]
 };
-var surfTop = {
+var surfUp = {
     arr0 : ["B","B","B"],
     arr1 : ["B","B","B"],
     arr2 : ["B","B","B"] 
 };
-var surfBottom = {
+var surfDown = {
     arr0 : ["R","R","R"],
     arr1 : ["R","R","R"],
     arr2 : ["R","R","R"]     
@@ -35,16 +35,13 @@ var surfBack = {
     arr2 : ["Y","Y","Y"]
 };
 
-// 1-2. 배열 출력 및 반복문에 적용할 List를 만든다.
-var totalId = ["Top","Left","Front","Right","Back","Bottom"];
-var totalSurf = [surfTop, surfLeft, surfFront, surfRight, surfBack, surfBottom];
-var totalArr = ["arr0","arr1","arr2"];
-
 // 2. 초기 상태를 출력한다.(상태 출력 객체) 
 var output = {
+    totalId : ["Up","Left","Front","Right","Back","Down"],
+    totalSurf : [surfUp, surfLeft, surfFront, surfRight, surfBack, surfDown],
     get : function(id){
         var divArr = [];
-        for(var i = 0; i < totalId.length; i++){
+        for(var i = 0; i < this.totalId.length; i++){
             divArr.push(document.getElementById(id[i]));
         }
         return divArr;
@@ -67,61 +64,79 @@ var output = {
         return;
     },
     result : function(){
-        var id = output.get(totalId);
-        var resultStr = output.arrToStr(totalSurf);
+        var id = output.get(this.totalId);
+        var resultStr = output.arrToStr(this.totalSurf);
         output.printStr(id, resultStr);
     }
 };
 
 // 3. 상태 변경 동작을 입력 받는다.(한 줄 입력 명령 구현(조건)과 함께 html 구현하는 김에 button 구성 해보기.)
+// 3-1. btn 구성 및 연결(html,js)
+// 3-2. input 창 구성 및 연결
+var input = {
+    get : function(){
+        var inputValue = document.getElementById("input").value;
+        return inputValue;
+    },
+    strToArr : function(str){
+        var arr = str.split(" ");
+        return arr;
+    }
+}
 // 4. 입력 받은 조건을 구동한다.(큐브 작동에 대한 코드 규현)
 // 4-1. 조작 면에 적용되는 움직임 구현
-var cubeMoveMain = {
-    turnLeft : function(obj){
-        var getObj = [];
-        for(i = 0; i < 3; i++){
-            for(j = 0; j < 3; j++){
-               getObj.push(obj[totalArr[i]][j]);
-            }
-        };
-        Obj = {
-            arr0 : [getObj[2],getObj[5],getObj[8]],
-            arr1 : [getObj[1],getObj[4],getObj[7]],
-            arr2 : [getObj[0],getObj[3],getObj[6]]
-        };
-        return Obj;
-    },
-    turnRight : function(obj){
-        var getObj = [];
-        for(i = 0; i < 3; i++){
-            for(j = 0; j < 3; j++){
-               getObj.push(obj[totalArr[i]][j]);
-            }
-        };
-        var resultObj = {
-            arr0 : [getObj[6],getObj[3],getObj[0]],
-            arr1 : [getObj[7],getObj[4],getObj[1]],
-            arr2 : [getObj[8],getObj[5],getObj[2]]
-        };
-        return resultObj;
-    }
-};
+var cubeMoveParts = {
+    totalArr : ["arr0","arr1","arr2"],
 
-// 4-2. 조작 면 주변 4면에 적용되는 움직임을 구현
-var cubeMoveSide = {
+    mainTurn : function(obj){
+        var getObj = {
+            arr0 : [],
+            arr1 : [],
+            arr2 : []
+        };
+        for(var i = 0; i < 3; i++){
+            for(var j = 0; j < 3; j++){
+               getObj[this.totalArr[i]].push(obj[this.totalArr[i]][j]);
+            }
+        };
+        for(var k = 0; k < 3; k++){
+            for(var l = 0; l < 3; l++){
+                obj[this.totalArr[2-l]][k] = getObj[this.totalArr[k]][l];
+            }
+        };
+        return obj;
+    },
+    mainTurnRev : function(obj){
+        var getObj = {
+            arr0 : [],
+            arr1 : [],
+            arr2 : []
+        };
+        for(var i = 0; i < 3; i++){
+            for(var j = 0; j < 3; j++){
+               getObj[this.totalArr[i]].push(obj[this.totalArr[i]][j]);
+            }
+        };
+        for(var k = 0; k < 3; k++){
+            for(var l = 0; l < 3; l++){
+                obj[this.totalArr[l]][2-k] = getObj[this.totalArr[k]][l];
+            }
+        };
+        return obj;
+    },
     getRow : function(obj, num){ // num은 0(first row) 혹은 2(third row)를 입력.
-        var getValue = obj[totalArr[num]]
+        var getValue = obj[this.totalArr[num]]
         return getValue;
     },
     getColumn : function(obj, num){// num은 0(first column) 혹은 2(third column)를 입력.
         var getValue = [];
         for(i = 0; i < 3; i++){
-            getValue.push(obj[totalArr[i]][num]);
+            getValue.push(obj[this.totalArr[i]][num]);
         };
         return getValue;
     },
     pushRow : function(valueFrom, objTo, num){ // num은 0(first row) 혹은 2(third row)를 입력.
-        objTo[totalArr[num]] = valueFrom;
+        objTo[this.totalArr[num]] = valueFrom;
         return;
     },
     pushRowRev : function(valueFrom, objTo, num){ //역으로 넣어주는 경우 필요
@@ -130,18 +145,18 @@ var cubeMoveSide = {
             var getValue = valueFrom.pop();
             result.push(getValue);
         }
-        objTo[totalArr[num]] = result;
+        objTo[this.totalArr[num]] = result;
         return;
     },
     pushColumn : function(valueFrom, objTo, num){ // num은 0(first row) 혹은 2(third row)를 입력.
         for(i = 0; i < 3; i++){
-            objTo[totalArr[i]][num] = valueFrom[i];
+            objTo[this.totalArr[i]][num] = valueFrom[i];
         }
         return;
     },
     pushColumnRev : function(valueFrom, objTo, num){ //역으로 넣어주는 경우 필요
         for(i = 0; i < 3; i++){
-            objTo[totalArr[i]][num] = valueFrom[2-i];
+            objTo[this.totalArr[i]][num] = valueFrom[2-i];
         }
         return;
     }
@@ -149,56 +164,93 @@ var cubeMoveSide = {
 
 // 4-3. 6면 조작에 대한 함수 구현
 var cubeMove = {
-    top : function(){
-        cubeMoveMain.turnRight(surfTop);
+    inputGo : function(){
+        var message  = document.getElementById("message");
+        message.innerHTML = "";
+        var inputStr = input.get();
+        var inputArr = input.strToArr(inputStr);
+        var maxNum = inputArr.length;
+        for(var i = 0; i < maxNum; i++){
+           var a = inputArr.shift();
+           if( a === "U"){
+               this.up();
+           } else if(a === "D"){
+               this.down();
+           } else if(a === "L"){
+               this.left();
+           } else if(a === "R"){
+               this.right();
+           } else if(a === "F"){
+               this.front();
+           } else if(a === "B"){
+               this.back();
+           } else if(a === "U'"){
+               this.upRev();
+           } else if(a === "D'"){
+               this.downRev();
+           } else if(a === "L'"){
+               this.leftRev();
+           } else if(a === "R'"){
+               this.rightRev();
+           } else if(a === "F'"){
+               this.frontRev();
+           } else if(a === "B'"){
+               this.Rev();
+           } else {
+               message.innerHTML = "잘못된 값(형식)을 입력하였습니다.";
+           }
+        }
+    },
+    up : function(){
+        cubeMoveParts.mainTurnRev(surfUp);
 
         var turn = [surfFront, surfLeft, surfBack, surfRight]; 
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
-            getArr.push(cubeMoveSide.getRow(turn[i],0));
+            getArr.push(cubeMoveParts.getRow(turn[i],0));
         }
 
         turn.push(turn.shift());
 
         for(var j = 0; j < turn.length; j++){
-            cubeMoveSide.pushRow(getArr[j], turn[j], 0);
+            cubeMoveParts.pushRow(getArr[j], turn[j], 0);
         }
 
-        console.log("Top Reverse Move");
+        console.log("Up Move");
         output.result();
         return;
     },
-    bottom : function(){
-        cubeMoveMain.turnRight(surfBottom);
+    down : function(){
+        cubeMoveParts.mainTurnRev(surfDown);
 
         var turn = [surfFront, surfRight, surfBack, surfLeft];
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
-            getArr.push(cubeMoveSide.getRow(turn[i],2));
+            getArr.push(cubeMoveParts.getRow(turn[i],2));
         }
 
         turn.push(turn.shift());
 
         for(var j = 0; j < turn.length; j++){
-            cubeMoveSide.pushRow(getArr[j], turn[j], 2); 
+            cubeMoveParts.pushRow(getArr[j], turn[j], 2); 
         }
-        console.log("Bottom Move");
+        console.log("Down Move");
         output.result();
         return;
     },
     left : function(){
-        cubeMoveMain.turnRight(surfLeft); 
+        cubeMoveParts.mainTurnRev(surfLeft); 
 
-        var turn = [surfTop, surfFront, surfBottom, surfBack];
+        var turn = [surfUp, surfFront, surfDown, surfBack];
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i <= 2){
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             } else{
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             }
         }
 
@@ -206,11 +258,11 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){ 
             if(j <= 1){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 0);
             } else if(j === 2){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 2);
             } else{
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 0);
             }
         }
         console.log("Left Move");
@@ -218,16 +270,16 @@ var cubeMove = {
         return;
     },
     right : function(){
-        cubeMoveMain.turnRight(surfRight);
+        cubeMoveParts.mainTurnRev(surfRight);
 
-        var turn = [surfBottom, surfFront, surfTop, surfBack];
+        var turn = [surfDown, surfFront, surfUp, surfBack];
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i <= 2){
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             } else{
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             }
         };
 
@@ -235,11 +287,11 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){
             if(j <= 1){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 2);
             } else if(j === 2){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 0);
             } else{
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 2);
             }
         };
         console.log("Right Move");
@@ -247,20 +299,20 @@ var cubeMove = {
         return;
     },
     front : function(){
-        cubeMoveMain.turnRight(surfFront); 
+        cubeMoveParts.mainTurnRev(surfFront); 
 
-        var turn = [surfTop, surfRight, surfBottom, surfLeft]; 
+        var turn = [surfUp, surfRight, surfDown, surfLeft]; 
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i === 0){
-                getArr.push(cubeMoveSide.getRow(turn[i],2));
+                getArr.push(cubeMoveParts.getRow(turn[i],2));
             } else if(i === 1){
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             } else if(i === 2){
-                getArr.push(cubeMoveSide.getRow(turn[i],0));
+                getArr.push(cubeMoveParts.getRow(turn[i],0));
             } else {
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             }
         }
 
@@ -268,13 +320,13 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){
             if(j === 0){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 0);
             } else if(j === 1){
-                cubeMoveSide.pushRowRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushRowRev(getArr[j], turn[j], 0);
             } else if(j === 2){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 2);
             } else{
-                cubeMoveSide.pushRowRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushRowRev(getArr[j], turn[j], 2);
             }
         }
 
@@ -283,20 +335,20 @@ var cubeMove = {
         return;
     },
     back : function(){
-        cubeMoveMain.turnRight(surfBack); 
+        cubeMoveParts.mainTurnRev(surfBack); 
 
-        var turn = [surfTop, surfLeft, surfBottom, surfRight]; 
+        var turn = [surfUp, surfLeft, surfDown, surfRight]; 
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i === 0){
-                getArr.push(cubeMoveSide.getRow(turn[i],0));
+                getArr.push(cubeMoveParts.getRow(turn[i],0));
             } else if(i === 1){
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             } else if(i === 2){
-                getArr.push(cubeMoveSide.getRow(turn[i],2));
+                getArr.push(cubeMoveParts.getRow(turn[i],2));
             } else {
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             }
         }
 
@@ -304,13 +356,13 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){
             if(j === 0){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 0);
             } else if(j === 1){
-                cubeMoveSide.pushRow(getArr[j], turn[j], 2);
+                cubeMoveParts.pushRow(getArr[j], turn[j], 2);
             } else if(j === 2){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 2);
             } else{
-                cubeMoveSide.pushRow(getArr[j], turn[j], 0);
+                cubeMoveParts.pushRow(getArr[j], turn[j], 0);
             }
         }
 
@@ -318,55 +370,55 @@ var cubeMove = {
         output.result();
         return;
     },
-    topRev : function(){
-        cubeMoveMain.turnLeft(surfTop);
+    upRev : function(){
+        cubeMoveParts.mainTurn(surfUp);
 
         var turn = [surfFront, surfRight, surfBack, surfLeft];
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
-            getArr.push(cubeMoveSide.getRow(turn[i],0));
+            getArr.push(cubeMoveParts.getRow(turn[i],0));
         }
 
         turn.push(turn.shift());
 
         for(var j = 0; j < turn.length; j++){
-            cubeMoveSide.pushRow(getArr[j], turn[j], 0);
+            cubeMoveParts.pushRow(getArr[j], turn[j], 0);
         }
-        console.log("Top Reverse Move");
+        console.log("Up Reverse Move");
         output.result();
         return;
     },
-    bottomRev : function(){
-        cubeMoveMain.turnLeft(surfBottom);
+    downRev : function(){
+        cubeMoveParts.mainTurn(surfDown);
 
         var turn = [surfFront, surfLeft, surfBack, surfRight];
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
-            getArr.push(cubeMoveSide.getRow(turn[i],2));
+            getArr.push(cubeMoveParts.getRow(turn[i],2));
         }
 
         turn.push(turn.shift());
 
         for(var j = 0; j < turn.length; j++){
-            cubeMoveSide.pushRow(getArr[j], turn[j], 2);
+            cubeMoveParts.pushRow(getArr[j], turn[j], 2);
         }
-        console.log("Bottom Move");
+        console.log("Down Reverse Move");
         output.result();
         return;
     },
     leftRev : function(){
-        cubeMoveMain.turnLeft(surfLeft);
+        cubeMoveParts.mainTurn(surfLeft);
 
-        var turn = [surfBottom, surfFront, surfTop, surfBack];
+        var turn = [surfDown, surfFront, surfUp, surfBack];
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i <= 2){
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             } else{
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             }
         };
 
@@ -374,11 +426,11 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){
             if(j <= 1){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 0);
             } else if(j === 2){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 2);
             } else{
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 0);
             }
         };
         console.log("Left Reverse Move");
@@ -387,16 +439,16 @@ var cubeMove = {
     },
 
     rightRev : function(){
-        cubeMoveMain.turnLeft(surfRight);
+        cubeMoveParts.mainTurn(surfRight);
 
-        var turn = [surfTop, surfFront, surfBottom, surfBack];
+        var turn = [surfUp, surfFront, surfDown, surfBack];
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i <= 2){
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             } else{
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             }
         }
 
@@ -404,11 +456,11 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){
             if(j <= 1){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 2);
             } else if(j === 2){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 0);
             } else{
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 2);
             }
         }
         console.log("Right Reverse Move");
@@ -416,20 +468,20 @@ var cubeMove = {
         return;
     },
     frontRev : function(){
-        cubeMoveMain.turnLeft(surfFront); 
+        cubeMoveParts.mainTurn(surfFront); 
 
-        var turn = [surfTop, surfLeft, surfBottom, surfRight]; 
+        var turn = [surfUp, surfLeft, surfDown, surfRight]; 
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i === 0){
-                getArr.push(cubeMoveSide.getRow(turn[i],2));
+                getArr.push(cubeMoveParts.getRow(turn[i],2));
             } else if(i === 1){
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             } else if(i === 2){
-                getArr.push(cubeMoveSide.getRow(turn[i],0));
+                getArr.push(cubeMoveParts.getRow(turn[i],0));
             } else {
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             }
         }
 
@@ -437,13 +489,13 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){
             if(j === 0){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 2);
             } else if(j === 1){
-                cubeMoveSide.pushRow(getArr[j], turn[j], 0);
+                cubeMoveParts.pushRow(getArr[j], turn[j], 0);
             } else if(j === 2){
-                cubeMoveSide.pushColumnRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumnRev(getArr[j], turn[j], 0);
             } else{
-                cubeMoveSide.pushRow(getArr[j], turn[j], 2);
+                cubeMoveParts.pushRow(getArr[j], turn[j], 2);
             }
         }
 
@@ -452,20 +504,20 @@ var cubeMove = {
         return;
     },
     backRev : function(){
-        cubeMoveMain.turnLeft(surfBack); 
+        cubeMoveParts.mainTurn(surfBack); 
 
-        var turn = [surfTop, surfRight, surfBottom, surfLeft]; 
+        var turn = [surfUp, surfRight, surfDown, surfLeft]; 
         var getArr = [];
 
         for(var i = 0; i < turn.length; i++){
             if(i === 0){
-                getArr.push(cubeMoveSide.getRow(turn[i],0));
+                getArr.push(cubeMoveParts.getRow(turn[i],0));
             } else if(i === 1){
-                getArr.push(cubeMoveSide.getColumn(turn[i],2));
+                getArr.push(cubeMoveParts.getColumn(turn[i],2));
             } else if(i === 2){
-                getArr.push(cubeMoveSide.getRow(turn[i],2));
+                getArr.push(cubeMoveParts.getRow(turn[i],2));
             } else {
-                getArr.push(cubeMoveSide.getColumn(turn[i],0));
+                getArr.push(cubeMoveParts.getColumn(turn[i],0));
             }
         }
 
@@ -473,13 +525,13 @@ var cubeMove = {
 
         for(var j = 0; j < turn.length; j++){
             if(j === 0){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 2);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 2);
             } else if(j === 1){
-                cubeMoveSide.pushRowRev(getArr[j], turn[j], 2);
+                cubeMoveParts.pushRowRev(getArr[j], turn[j], 2);
             } else if(j === 2){
-                cubeMoveSide.pushColumn(getArr[j], turn[j], 0);
+                cubeMoveParts.pushColumn(getArr[j], turn[j], 0);
             } else{
-                cubeMoveSide.pushRowRev(getArr[j], turn[j], 0);
+                cubeMoveParts.pushRowRev(getArr[j], turn[j], 0);
             }
         }
 
@@ -490,8 +542,11 @@ var cubeMove = {
 }
 var quitBtn = {
     quit : function(){
-        console.log("게임이 종료 되었습니다.")
+        console.log("게임이 종료 되었습니다.");
     }
 }
 // 5. 변동된 조건을 출력한다. (html 에 text 형태로 구현.)
-output.result();
+var main = function(){
+    output.result();
+}
+main();
