@@ -8,13 +8,30 @@ var cube = {
 //   2. 초기 상태를 출력한다.
 var output = function(){
     var cubeArea = document.getElementById('cubeArea');
-    cubeArea.innerHTML = cube.arr0 + "<br>"+ cube.arr1 +"<br>"+ cube.arr2;
+    var arrs = ["arr0", "arr1", "arr2"];
+    var getStr = [];
+    for (var i = 0; i < 3; i++){
+        getStr.push(cube[arrs[i]].join(" "));
+    }
+    cubeArea.innerHTML = getStr[0] + "<br>"+ getStr[1] +"<br>"+ getStr[2];
 };
 //   3. 상태 변경 동작을 입력 받는다.(console 명령 구현(조건)과 함께 html 구현하는 김에 button 구성도 하고 싶다.)
+//   3-1. button 구현 완료(html)
+//   3-2. input 구현
+var input = {
+    get : function(){
+        var inputValue = document.getElementById("input").value;
+        return inputValue;
+    },
+    strToArr : function(str){
+        var arr = str.split(" ");
+        return arr;
+    }
+}
 //   4. 입력 받은 조건을 구동한다.
 //   4-1. 동작 객체 (왼쪽,오른쪽 이동(윗줄, 아랫줄), 위,아래 이동(왼줄, 오른줄))
 
-var cubeMove = {
+var cubeMoveParts = {
     left : function(arr){
         var getWord = arr.shift();
         arr.push(getWord);
@@ -50,36 +67,77 @@ var cubeMove = {
         output();
     }
 }
-//   4-2. button 동작 함수 구
-var tLeft = function(){
-    cubeMove.left(cube.arr0);
-};
-var tRight = function(){
-    cubeMove.right(cube.arr0);
-};
-var bRight = function(){
-    cubeMove.right(cube.arr2);
-};
-var bLeft = function(){
-    cubeMove.left(cube.arr2);
-};
-var rUp = function(){
-    cubeMove.up(cube, 2);
-};
-var rDown = function(){
-    cubeMove.down(cube, 2);
-};
-var lUp = function(){
-    cubeMove.up(cube, 0);
-};
-var lDown = function(){
-    cubeMove.down(cube, 0);
-};
-
-//   4-3. button 동작(종료 버튼)
-var q = function(){
-    cubeArea.innerHTML = "Bye~~!";
-};
+//   4-2. button 동작 함수 구현
+var cubeMove = {
+    inputGo : function(){
+        var message = document.getElementById("message");
+        message.innerHTML = "";
+        var orderStr = input.get();
+        var orderArr = input.strToArr(orderStr);
+        var maxNum = orderArr.length;
+        for (var i = 0; i < maxNum; i++){
+            var a = orderArr.shift();
+            if(a === "U"){
+                cubeMove.tLeft();
+            } else if(a === "R"){
+                cubeMove.rUp();
+            } else if(a === "L"){
+                cubeMove.lDown();
+            } else if(a === "B"){
+                cubeMove.bRight();
+            } else if(a === "U'"){
+                cubeMove.tRight();
+            } else if(a === "R'"){
+                cubeMove.rDown();
+            } else if(a === "L'"){
+                cubeMove.lUp();
+            } else if(a === "B'"){
+                cubeMove.bLeft();
+            } else if(a === "Q"){
+                cubeMove.q();
+            } else{
+                message.innerHTML = "잘못된 값(형식)을 입력하였습니다."
+            }
+        }
+    },
+    tLeft : function(){
+        cubeMoveParts.left(cube.arr0);
+        console.log("윗줄을 왼쪽으로 이동");
+    },
+    tRight : function(){
+        cubeMoveParts.right(cube.arr0);
+        console.log("윗줄을 오른쪽으로 이동");    
+    },
+    bRight : function(){
+        cubeMoveParts.right(cube.arr2);
+        console.log("아랫줄을 오른쪽으로 이동");    
+    },
+    bLeft : function(){
+        cubeMoveParts.left(cube.arr2);
+        console.log("아랫줄을 왼쪽으로 이동");
+    },
+    rUp : function(){
+        cubeMoveParts.up(cube, 2);
+        console.log("오른쪽 줄을 위로 이동");
+    },
+    rDown : function(){
+        cubeMoveParts.down(cube, 2);
+        console.log("오른쪽 줄을 아래로 이동");
+    },
+    lUp : function(){
+        cubeMoveParts.up(cube, 0);
+        console.log("왼쪽 줄을 위로 이동");
+    },
+    lDown : function(){
+        cubeMoveParts.down(cube, 0);
+        console.log("왼쪽 줄을 아래로 이동");
+    },
+    //   4-3. button 동작(종료 버튼)
+    q : function(){
+        cubeArea.innerHTML = "Bye~~!";
+        console.log("종료");
+    }
+}
 
 //   5. 변동된 조건을 출력한다. (html 에 text 형태 및 console 모두 뜨도록 하자.)
 output();
