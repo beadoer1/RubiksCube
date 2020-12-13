@@ -35,12 +35,12 @@ var surfBack = {
     arr2 : ["Y","Y","Y"]
 };
 
-var answer = [];
-
 // 2. 초기 상태를 출력한다.(상태 출력 객체) 
 var output = {
     totalId : ["Up","Left","Front","Right","Back","Down"],
     totalSurf : [surfUp, surfLeft, surfFront, surfRight, surfBack, surfDown],
+    answer : [],
+
     get : function(id){ //결과 값을 나타낼 때마다 'id'를 html에서 불러오는게 효율적일까..??(vs 전역변수 사용 시)
         var divArr = [];
         for(var i = 0; i < this.totalId.length; i++){
@@ -76,15 +76,15 @@ var output = {
             a.push(this.totalSurf[i].arr0.join(" "));
             a.push(this.totalSurf[i].arr1.join(" "));
             a.push(this.totalSurf[i].arr2.join(" "));
-            answer.push(a);
+            this.answer.push(a);
         }
-        return answer;
+        return this.answer;
     },
     checkAnswer : function(vsValue){
         result = true;
         for(var i = 0; i < 6; i++){
             for(var j = 0; j < 3; j++){
-                if(answer[i][j] != vsValue[i][j])
+                if(this.answer[i][j] != vsValue[i][j])
                 result = false;
             }
         }
