@@ -7,7 +7,7 @@
     <style src = "step-3.css">
         .wholeBlock {
             text-align : center;
-            width : 560px;
+            width : 550px;
             margin : auto;
         }
         h1 {
@@ -29,6 +29,18 @@
             flex-wrap : wrap;
             margin : auto;
         }
+        .buttons1 {
+            text-align : right;
+            margin : 5px 5px 0px 200px;
+        }
+        .startBtn {
+            text-align : right;
+            margin : 5px auto;
+        }
+        .time {
+            text-align : right;
+            margin : 5px 0px auto;
+        }
         .innerBlock {
             margin : 5px;
         }
@@ -44,7 +56,7 @@
             flex-wrap : wrap;
             margin : auto
         }
-        .buttons {
+        .buttons2 {
             text-align : left;
             margin : 20px 30px 0px 0px;
         }
@@ -70,9 +82,15 @@
                 - 시계 방향으로 회전 --> U(Up), D(Down), L(Left), R(Right), F(Front), B(Back) <br>
                 - 시계 반대 방향으로 회전 --> U', D', L', R', F', Ba'<br>
             </h4>
-            
+            <div class = "buttons1">
+                <button class = "reloadBtn" onclick = "cubeMove.reload()">새로고침</button>
+                <button class = "startBtn" onclick = "cubeMove.random()">시작(Random)</button>
+                <button id = "Q" onclick = "cubeMove.quit()">게임 종료</button>
+            </div>
+            <div class = "time" id = "time"></div>
+
         </div>
-        <div class = "cube-body">
+        <div class = "cube-body" id = "result">
             <div class = "outerBlock" id = "Up"></div>
             <div class = "innerBlock" id = "Left"></div>
             <div class = "innerBlock" id = "Front"></div>
@@ -82,14 +100,13 @@
         </div>
 
         <div class = "command">
-            <div class = "buttons">
+            <div class = "buttons2" >
                 <button id = "U" onclick = "cubeMove.up()">U</button>
                 <button id = "D" onclick = "cubeMove.down()">D</button>
                 <button id = "L" onclick = "cubeMove.left()">L</button>
                 <button id = "R" onclick = "cubeMove.right()">R</button>
                 <button id = "F" onclick = "cubeMove.front()">F</button>
-                <button id = "Ba" onclick = "cubeMove.back()">B</button>
-                <button id = "Q" onclick = "quitBtn.quit()">Q</button> <br>
+                <button id = "Ba" onclick = "cubeMove.back()">B</button> <br>
                 <button id = "TR" onclick = "cubeMove.upRev()">U'</button>
                 <button id = "DR" onclick = "cubeMove.downRev()">D'</button> 
                 <button id = "LR" onclick = "cubeMove.leftRev()">L'</button> 

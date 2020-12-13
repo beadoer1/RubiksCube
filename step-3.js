@@ -39,13 +39,14 @@ var surfBack = {
 var output = {
     totalId : ["Up","Left","Front","Right","Back","Down"],
     totalSurf : [surfUp, surfLeft, surfFront, surfRight, surfBack, surfDown],
-    get : function(id){
+    answer : [],
+    get : function(id){ //결과 값을 나타낼 때마다 'id'를 html에서 불러오는게 효율적일까..??(vs 전역변수 사용 시)
         var divArr = [];
         for(var i = 0; i < this.totalId.length; i++){
             divArr.push(document.getElementById(id[i]));
         }
         return divArr;
-    },
+    },    
     arrToStr : function(surfArr){
         var strArr = [];
         for (var i = 0; i < surfArr.length; i++){
@@ -57,11 +58,28 @@ var output = {
         }
         return strArr;
     },
+    // getAnswer : function(){
+    //     for (var i = 0; i < this.totalSurf.length; i++){
+    //         var a = [];
+    //         a.push(this.totalSurf[i].arr0.join(" "));
+    //         a.push(this.totalSurf[i].arr1.join(" "));
+    //         a.push(this.totalSurf[i].arr2.join(" "));
+    //         this.answer.push(a);
+    //     }
+    // },
     printStr : function(outArr, strArr){
         for(var i = 0; i < outArr.length; i++){
             outArr[i].innerHTML = strArr[i][0] + "<br>" + strArr[i][1] + "</br>" + strArr[i][2]
         }
         return;
+    },
+    printEnd : function(){
+        var outputEnd = document.getElementById("result");
+        outputEnd.innerHTML = "게임이 종료 되었습니다."
+    },
+    printSuccess : function(){
+        var outputEnd = document.getElementById("result");
+        outputEnd.innerHTML = "축하합니다!! 성공하였습니다!!"
     },
     result : function(){
         var id = output.get(this.totalId);
@@ -82,6 +100,20 @@ var input = {
         var arr = str.split(" ");
         return arr;
     }
+}
+// v추가구현1. 프로그램 종료 시 경과 시간 출력
+var time = {
+    startTime : 0,
+    x : setInterval(this.updateTime,50),
+    start : function(){
+        this.startTime = Date.now();
+    },
+    updateTime : function(){
+        var gameTime = document.getElementById("time");
+        var now = Date.now() - this.startTime
+        var sec = now / 1000;
+        gameTime.innerHTML = "경과시간 : " + sec + " s";
+    },
 }
 // 4. 입력 받은 조건을 구동한다.(큐브 작동에 대한 코드 규현)
 // 4-1. 조작 면에 적용되는 움직임 구현
@@ -164,6 +196,20 @@ var cubeMoveParts = {
 
 // 4-3. 6면 조작에 대한 함수 구현
 var cubeMove = {
+    reload : function(){
+        window.location.reload();},
+// v2. 큐브의 무작위 섞기 기능
+// - > cubeMove.random 에 구현
+    random : function(){
+        var cubeMoveArr = ["up","down","left","right","front","back","upRev","downRev","leftRev","rightRev","frontRev","backRev"];
+        for (var i = 0; i < 2 ; i++){
+            var ranNum = Math.floor(Math.random() * cubeMoveArr.length);
+            this[cubeMoveArr[ranNum]]();
+        }
+        output.result();
+        time.start();
+        console.log("시작(랜덤 섞기)")
+    },
     inputGo : function(){
         var message  = document.getElementById("message");
         message.innerHTML = "";
@@ -538,15 +584,24 @@ var cubeMove = {
         console.log("Back Reverse Move");
         output.result();
         return;
-    }
-}
-var quitBtn = {
-    quit : function(){
+    },
+    quit :function(){
+        // clearInterval(x);
+        time.updateTime();
+        output.printEnd();
         console.log("게임이 종료 되었습니다.");
     }
+
 }
 // 5. 변동된 조건을 출력한다. (html 에 text 형태로 구현.)
+
 var main = function(){
     output.result();
 }
 main();
+
+// 추가 구현 기능
+
+
+// 3. 모든 면을 맞추면 축하 메시지와 함께 프로그램을 자동 종료
+
