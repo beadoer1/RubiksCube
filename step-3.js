@@ -35,11 +35,12 @@ var surfBack = {
     arr2 : ["Y","Y","Y"]
 };
 
+var answer = [];
+
 // 2. 초기 상태를 출력한다.(상태 출력 객체) 
 var output = {
     totalId : ["Up","Left","Front","Right","Back","Down"],
     totalSurf : [surfUp, surfLeft, surfFront, surfRight, surfBack, surfDown],
-    answer : [],
     get : function(id){ //결과 값을 나타낼 때마다 'id'를 html에서 불러오는게 효율적일까..??(vs 전역변수 사용 시)
         var divArr = [];
         for(var i = 0; i < this.totalId.length; i++){
@@ -58,15 +59,6 @@ var output = {
         }
         return strArr;
     },
-    // getAnswer : function(){
-    //     for (var i = 0; i < this.totalSurf.length; i++){
-    //         var a = [];
-    //         a.push(this.totalSurf[i].arr0.join(" "));
-    //         a.push(this.totalSurf[i].arr1.join(" "));
-    //         a.push(this.totalSurf[i].arr2.join(" "));
-    //         this.answer.push(a);
-    //     }
-    // },
     printStr : function(outArr, strArr){
         for(var i = 0; i < outArr.length; i++){
             outArr[i].innerHTML = strArr[i][0] + "<br>" + strArr[i][1] + "</br>" + strArr[i][2]
@@ -77,14 +69,46 @@ var output = {
         var outputEnd = document.getElementById("result");
         outputEnd.innerHTML = "게임이 종료 되었습니다."
     },
+    // 추가구현3. 모든 면을 맞추면 축하 메시지와 함께 프로그램을 자동 종료(getAnswer,checkAnswer,printSuccess,result)
+    getAnswer : function(){
+        for (var i = 0; i < this.totalSurf.length; i++){
+            var a = [];
+            a.push(this.totalSurf[i].arr0.join(" "));
+            a.push(this.totalSurf[i].arr1.join(" "));
+            a.push(this.totalSurf[i].arr2.join(" "));
+            answer.push(a);
+        }
+        return answer;
+    },
+    checkAnswer : function(vsValue){
+        result = true;
+        for(var i = 0; i < 6; i++){
+            for(var j = 0; j < 3; j++){
+                if(answer[i][j] != vsValue[i][j])
+                result = false;
+            }
+        }
+        return result;
+    },
     printSuccess : function(){
         var outputEnd = document.getElementById("result");
         outputEnd.innerHTML = "축하합니다!! 성공하였습니다!!"
     },
+    firstScreen : function(){
+        var id = this.get(this.totalId);
+        var resultStr = this.arrToStr(this.totalSurf);
+        this.printStr(id, resultStr);
+    },
     result : function(){
-        var id = output.get(this.totalId);
-        var resultStr = output.arrToStr(this.totalSurf);
-        output.printStr(id, resultStr);
+        var id = this.get(this.totalId);
+        var resultStr = this.arrToStr(this.totalSurf);
+        var checkResult = this.checkAnswer(resultStr);
+        if(checkResult === true){
+            time.updateTime();
+            this.printSuccess();
+        } else {
+            this.printStr(id, resultStr);
+        };
     }
 };
 
@@ -198,11 +222,10 @@ var cubeMoveParts = {
 var cubeMove = {
     reload : function(){
         window.location.reload();},
-// v2. 큐브의 무작위 섞기 기능
-// - > cubeMove.random 에 구현
+// v2. 큐브의 무작위 섞기 기능(random)
     random : function(){
         var cubeMoveArr = ["up","down","left","right","front","back","upRev","downRev","leftRev","rightRev","frontRev","backRev"];
-        for (var i = 0; i < 2 ; i++){
+        for (var i = 0; i < 20 ; i++){
             var ranNum = Math.floor(Math.random() * cubeMoveArr.length);
             this[cubeMoveArr[ranNum]]();
         }
@@ -596,12 +619,7 @@ var cubeMove = {
 // 5. 변동된 조건을 출력한다. (html 에 text 형태로 구현.)
 
 var main = function(){
-    output.result();
+    output.firstScreen();
+    output.getAnswer();
 }
 main();
-
-// 추가 구현 기능
-
-
-// 3. 모든 면을 맞추면 축하 메시지와 함께 프로그램을 자동 종료
-
